@@ -17,10 +17,6 @@ class DataService {
     return http.post("/participation" , body)
   }
 
-  login(body){
-    return http.post("/login" , body)
-  }
-
   register(body){
     return http.post("/register" , body)
   }

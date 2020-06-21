@@ -6,7 +6,7 @@ import EditEventForm from "../../components/Form/EditEventForm";
 
 console.disableYellowBox = true;
 
-export default class  EditEventScreen extends Component {
+export default class  CreateEventScreen extends Component {
     handleEditFormSubmit = values => {
         console.log(values)
     };
@@ -17,7 +17,7 @@ export default class  EditEventScreen extends Component {
               <View style={styles.contentBox}>
                   <FadeSlide delay={150}>
                       <View style={styles.loginFormBox}>
-                          <Text>Edit Event</Text>
+                          <Text>Create Event</Text>
                           <EditEventForm
                               onSubmit={this.handleEditFormSubmit}/>
                           {this.props.error && (

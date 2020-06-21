@@ -13,7 +13,6 @@ class EditEventForm extends Component {
     return (
         <View>
             <View style={STYLES.formWrapper}>
-                <Text>Edit Event</Text>
                 <Field
                     name="nom_epreuve"
                     label="Nom Epreuve"
@@ -42,13 +41,13 @@ class EditEventForm extends Component {
                     <Item label="8ème FINAL" value="8ème FINAL"/>
                     <Item label="POUL" value="POUL"/>
                 </Field>
-                <Field name="date_epreuve"
-                   component={ props =>
+                <Field
+                    name="date_epreuve"
+                    component={ props =>
                        <DatePicker
                            date={props.input.value}
-                           onDateChange={(date) => props.input.onChange(moment(new Date(date)).format("MM/DD/YYYY"))}
-                       />
-                   }
+                           onDateChange={(date) => props.input.onChange(moment(new Date(date)).format("MM/DD/YYYY"))}/>
+                    }
                 />
             </View>
              <View>

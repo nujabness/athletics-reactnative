@@ -11,27 +11,20 @@ import FadeSlide from "../../animations/FadeSlide/FadeSlide";
 import LoginForm from "../../components/Form/LoginForm";
 
 import COLORS from "../../utils/colors";
-import DataService from "../../services/http.service";
+import { login } from "../../store/actions/app";
 
 class LoginScreen extends Component {
 	handleLoginFormSubmit = values => {
-		this.login(values.email, values.password);
+		this.props.login(values.email, values.password);
 	};
 
-	login(email, password) {
-		let body = {
-			email: email,
-			password: password
+	componentDidUpdate() {
+		const { user } = this.props;
+
+		// && user.token
+		if (user) {
+			this.props.navigation.navigate('Athletics')
 		}
-		DataService.login(body).then(response => {
-			if(response.data.user !== null && response.data.user !== undefined) {
-				this.props.navigation.navigate('Athletics')
-			} else {
-				console.log("ELSE")
-			}
-		}).catch(e => {
-			console.log(e);
-		});
 	}
 
 	render() {
@@ -120,12 +113,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-
+	user: state.app.user,
 });
 
 const mapDispatchToProps = dispatch => {
 	return {
-
+		login: (email, password) => dispatch(login(email, password)),
 	};
 };
 
