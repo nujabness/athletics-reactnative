@@ -16,6 +16,18 @@ class DataService {
   getParticipations(body){
     return http.post("/participation" , body)
   }
+
+  login(body){
+    return http.post("/login" , body)
+  }
+
+  register(body){
+    return http.post("/register" , body)
+  }
+
+  detailsUser(body){
+    return http.post("/user/details" , body)
+  }
 }
 
 export default new DataService();

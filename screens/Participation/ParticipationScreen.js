@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import DataService from "../services/http.service";
-import  Participation  from '../components/Participation';
+import DataService from "../../services/http.service";
+import  Participation  from '../../components/Participation';
 console.disableYellowBox = true;
 
 export default class ParticipationScreen extends Component {

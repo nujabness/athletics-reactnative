@@ -1,51 +1,45 @@
-import React, { Component } from 'react';
-import { createAppContainer } from "react-navigation";
-import { createDrawerNavigator } from "react-navigation-drawer";
-import { Dimensions } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as React from 'react';
+import { Provider } from "react-redux";
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import useCachedResources from './hooks/useCachedResources';
+import BottomTabNavigator from './navigation/BottomTabNavigator';
+import LinkingConfiguration from './navigation/LinkingConfiguration';
+import LoginScreen from "./screens/Login/LoginScreen";
+import RegisterScreen from "./screens/Register/RegisterScreen";
+import SplashScreen from "./screens/SplashScreen";
+import { store } from "./store/configureStore";
 
-import  {
-  EventScreen,
-  ProfileScreen,
-  ParticipationScreen
-} from "./screens";
+const Stack = createStackNavigator();
 
-const DrawerNavigatior = createDrawerNavigator({
-  ProfileScreen: {
-    screen: ProfileScreen,
-    navigationOptions: {
-      title: "Profile",
-      drawerIcon: ({tintColor}) => <Feather name="user" size={16} color={tintColor}/>
-    }
-  },
-  EventScreen: {
-    screen: EventScreen,
-    navigationOptions: {
-      title: "Events",
-      drawerIcon: ({tintColor}) => <Feather name="message-square" size={16} color={tintColor}/>
-    }
-  },
-  Participations: {
-    screen: ParticipationScreen,
-    navigationOptions: {
-      title: "Participations",
-      drawerIcon: ({tintColor}) => <Feather name="list" size={16} color={tintColor}/>
-    }
-  },
-}, {
-  drawerWidth: Dimensions.get('window').width * 0.90,
-  hideStatusBar: true,
-  contentOptions: {
-    activeTintColor: 'white',
-    activeBackgroundColor: "#f03a5f",
-    itemsContainerStyle:{
-      marginTop: 16,
-      marginHorizontal: 8,
-    },
-    itemStyle: {
-      borderRadius: 4
-    }
+export default function App(props) {
+  const isLoadingComplete = useCachedResources();
+
+  if (!isLoadingComplete) {
+    return null;
+  } else {
+    return (
+        <Provider store={store}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+            <NavigationContainer linking={LinkingConfiguration}>
+              <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="Splash" component={SplashScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Register" component={RegisterScreen} />
+                <Stack.Screen name="Athletics" component={BottomTabNavigator} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </View>
+        </Provider>
+    );
   }
-})
+}
 
-export default createAppContainer(DrawerNavigatior)
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
