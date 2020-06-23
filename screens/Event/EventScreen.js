@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import DataService from "../../services/http.service";
-import EventCard from "../../components/EventCard";
+import EventCard from "../../components/Event/EventCard";
+import COLORS from "../../utils/colors";
+import {connect} from "react-redux";
 console.disableYellowBox = true;
 
-export default class EventScreen extends Component {
+class EventScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -13,26 +15,35 @@ export default class EventScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    DataService.getAllEvents().then(response => {
+  allEvents(){
+    let headers = {
+      headers: {
+        Authorization: 'Bearer ' + this.props.user.token
+      }
+    }
+    DataService.getAllEvents(headers).then(response => {
       this.setState({
         events: response.data.epreuves
       });
-      console.log(response.data);
     }).catch(e => {
       console.log(e);
     });
+  }
+
+  componentDidMount() {
+    this.allEvents()
   }
 
   render(){
     const events = this.state.events;
     return (
        <ScrollView style={styles.container}>
+         <Text style={styles.title}>All Events</Text>
          {
-           events.map((item, index) => {
+           events.map((item) => {
              return(
-                 <View style={styles.card} contentContainerStyle={styles.contentContainerStyle}>
-                    <EventCard key={index} data={item} />
+                 <View key={this.props.user.id} style={styles.card} contentContainerStyle={styles.contentContainerStyle}>
+                    <EventCard navigation={this.props.navigation} data={item} user={this.props.user} allEvent={() => this.allEvents()}/>
                  </View>
              )
            })
@@ -48,8 +59,22 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginTop: 10
   },
-
+  title:{
+    marginTop: 60,
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginLeft: 30
+  },
   container: {
     flex: 1.0,
+    backgroundColor: COLORS.red,
   },
 })
+
+const mapStateToProps = state => ({
+  user: state.app.user,
+});
+
+export default connect(
+    mapStateToProps
+)(EventScreen);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {Button, Card, Paragraph, Title} from "react-native-paper";
-import { Text, StyleSheet } from "react-native";
+import {Card, Paragraph, Title} from "react-native-paper";
+import { Button, Text, StyleSheet } from "react-native";
 
 export default class  Participation extends Component {
    constructor(props){
@@ -15,25 +15,17 @@ export default class  Participation extends Component {
       }
    }
 
-
    render() {
       return(
          <Card>
             <Card.Content>
-               <Title>Card title</Title>
-               <Paragraph>Card content</Paragraph>
-               <Text>{this.state.user.prenom_epreuve} {this.state.user.nom_epreuve}</Text>
-               <Text>{this.props.data.epreuve.nom_epreuve} {this.props.data.epreuve.phase_epreuve}</Text>
-               <Text>{this.props.data.epreuve.date_epreuve}</Text>
-               <Text>{this.state.medaille} {this.state.resultat}</Text>
+               <Title>{this.props.user.prenom_athlete} {this.props.user.nom_athlete}</Title>
+               <Paragraph>
+                  <Text>{this.props.data.epreuve.nom_epreuve} {this.props.data.epreuve.phase_epreuve} </Text>
+                  <Text>{this.props.data.epreuve.type_epreuve} </Text>
+                  <Text>{this.state.medaille} {this.state.resultat} </Text>
+               </Paragraph>
             </Card.Content>
-            <Card.Actions>
-               <Button
-                  onPress={this.participer}
-                  style={styles.button}
-                  color="#ffffff"
-               >Supprimer</Button>
-            </Card.Actions>
          </Card>
       )
    }

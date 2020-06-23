@@ -1,35 +1,33 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import DataService from "../../services/http.service";
 import  Participation  from '../../components/Participation';
+import {connect} from "react-redux";
+import COLORS from "../../utils/colors";
 console.disableYellowBox = true;
 
-export default class ParticipationScreen extends Component {
+class ParticipationScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      title: "Athletics Tournament ~ Participations",
       participations: [],
-      user: {
-        nom_athlete: 'ness',
-        prenom_athlete: 'ness',
-        nationalite_athlete: {}
-      },
-      nationalite: ''
     }
   }
 
   componentDidMount() {
-    let body = {
-      "_id": "5de0f016d4d3e9d4074cd895"
+    let headers = {
+      headers: {
+        Authorization: 'Bearer ' + this.props.user.token
+      }
     }
-    DataService.getParticipations(body).then(response => {
+    let body = {
+      _id: this.props.user._id
+    }
+    DataService.getParticipations(body, headers).then(response => {
       this.setState({
           participations: response.data.participations,
       });
-      this.setTableParticipation();
-      console.log(response.data);
     }).catch(e => {
       console.log(e);
     });
@@ -37,11 +35,16 @@ export default class ParticipationScreen extends Component {
 
   render(){
     return (
-       <ScrollView style={styles.card}>
+       <ScrollView style={styles.container}>
+         <Text style={styles.title}>All Participations</Text>
          {
            this.state.participations.map((epreuve, index) => {
              return(
-                <Participation key={index} data={epreuve}/>
+                 <View style={styles.card}>
+                   <Participation
+                       key={index}
+                       user={this.props.user} data={epreuve} />
+                 </View>
              )
            })
          }
@@ -51,6 +54,27 @@ export default class ParticipationScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  card: { marginLeft: 20 },
+  card: {
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 10
+  },
+  title:{
+    marginTop: 60,
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginLeft: 30
+  },
+  container: {
+    flex: 1.0,
+    backgroundColor: COLORS.red,
+  },
+})
+
+const mapStateToProps = state => ({
+  user: state.app.user,
 });
 
+export default connect(
+    mapStateToProps
+)(ParticipationScreen);

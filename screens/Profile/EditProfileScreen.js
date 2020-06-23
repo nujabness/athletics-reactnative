@@ -3,10 +3,11 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import FadeSlide from "../../animations/FadeSlide/FadeSlide";
 import COLORS from "../../utils/colors";
 import EditUserForm from "../../components/Form/EditUserForm";
+import {connect} from "react-redux";
 
 console.disableYellowBox = true;
 
-export default class  EditProfileScreen extends Component {
+class  EditProfileScreen extends Component {
     handleEditFormSubmit = values => {
         console.log(values)
     };
@@ -18,6 +19,7 @@ export default class  EditProfileScreen extends Component {
                   <FadeSlide delay={150}>
                       <View style={styles.loginFormBox}>
                           <EditUserForm
+                              user={this.props.user}
                               onSubmit={this.handleEditFormSubmit}/>
                           {this.props.error && (
                               <Text style={styles.errorMessage}>
@@ -87,3 +89,12 @@ const styles = StyleSheet.create({
         color: COLORS.red,
     },
 });
+
+const mapStateToProps = state => ({
+    user: state.app.user,
+});
+
+export default connect(
+    mapStateToProps
+
+)(EditProfileScreen);

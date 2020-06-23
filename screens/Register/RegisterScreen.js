@@ -19,11 +19,16 @@ class RegisterScreen extends Component {
 	};
 
 	register(email, password) {
+		let headers = {
+			headers: {
+				Authorization: 'Bearer ' + this.props.user.token
+			}
+		}
 		let body = {
 			email: email,
 			password: password
 		}
-		DataService.register(body).then(response => {
+		DataService.register(body, headers).then(response => {
 			console.log(response)
 			if(response.status == 200) {
 				this.props.navigation.navigate('Login')

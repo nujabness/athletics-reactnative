@@ -14,7 +14,6 @@ class LoginForm extends Component {
                 <Field
                     name="email"
                     label="e-mail"
-                    textContentType="email"
                     autoCorrect={false}
                     autoCapitalize="none"
                     component={TextInput}
@@ -23,7 +22,6 @@ class LoginForm extends Component {
                 <Field
                     name="password"
                     label="Password"
-                    textContentType="password"
                     secureTextEntry={true}
                     autoCorrect={false}
                     autoCapitalize="none"

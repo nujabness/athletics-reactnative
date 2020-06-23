@@ -11,6 +11,10 @@ export default class  EditEventScreen extends Component {
         console.log(values)
     };
 
+    componentDidMount() {
+        console.log(this.props.navigation.getParam('epreuve'))
+    }
+
     render(){
       return (
           <View style={styles.screenContentWrapper}>

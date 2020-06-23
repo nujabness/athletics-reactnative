@@ -1,38 +1,49 @@
 import React, { Component } from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import DataService from "../../services/http.service";
-import EventCard from "../../components/EventCard";
+import {connect} from "react-redux";
+import UserCard from "../../components/User/UserCard";
+import COLORS from "../../utils/colors";
 console.disableYellowBox = true;
 
-export default class UserScreen extends Component {
+class UserScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      events: []
+      users: []
     };
   }
 
-  componentDidMount() {
-    DataService.getAllEvents().then(response => {
+  allUsers(){
+    let headers = {
+      headers: {
+        Authorization: 'Bearer ' + this.props.user.token
+      }
+    }
+    DataService.getAllUsers(headers).then(response => {
       this.setState({
-        events: response.data.epreuves
+        users: response.data.users
       });
-      console.log(response.data);
     }).catch(e => {
       console.log(e);
     });
   }
 
+  componentDidMount() {
+    this.allUsers()
+  }
+
   render(){
-    const events = this.state.events;
+    const users = this.state.users;
     return (
        <ScrollView style={styles.container}>
+         <Text style={styles.title}>All Users</Text>
          {
-           events.map((item, index) => {
+           users.map((item, index) => {
              return(
                  <View style={styles.card} contentContainerStyle={styles.contentContainerStyle}>
-                    <EventCard key={index} data={item} />
+                    <UserCard key={index} data={item} allUsers={() => this.allUsers()}/>
                  </View>
              )
            })
@@ -48,8 +59,22 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginTop: 10
   },
-
+  title:{
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginLeft: 30
+  },
   container: {
     flex: 1.0,
+    paddingTop: 60,
+    backgroundColor: COLORS.red,
   },
 })
+
+const mapStateToProps = state => ({
+  user: state.app.user,
+});
+
+export default connect(
+    mapStateToProps
+)(UserScreen);

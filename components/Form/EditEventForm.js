@@ -16,7 +16,6 @@ class EditEventForm extends Component {
                 <Field
                     name="nom_epreuve"
                     label="Nom Epreuve"
-                    textContentType="TextInput"
                     autoCorrect={false}
                     autoCapitalize="none"
                     component={TextInput}

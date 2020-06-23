@@ -11,18 +11,49 @@ import FadeSlide from "../../animations/FadeSlide/FadeSlide";
 import LoginForm from "../../components/Form/LoginForm";
 
 import COLORS from "../../utils/colors";
-import { login } from "../../store/actions/app";
+import { loginSuccess } from "../../store/actions/app";
+import axios from "../../http-common";
 
 class LoginScreen extends Component {
 	handleLoginFormSubmit = values => {
-		this.props.login(values.email, values.password);
+		axios
+			.post('/login',
+				{
+					email: values.email,
+					password: values.password,
+				},
+				{
+					timeout: 10000,
+				}
+			)
+			.then(response => {
+				if (response.status === 200) {
+					this.props.loginSuccess({
+						token: response.data.token,
+						_id: response.data.user._id,
+						role: response.data.user.role,
+						nom_athlete: response.data.user.nom_athlete,
+						prenom_athlete: response.data.user.prenom_athlete,
+						sexe_athlete: response.data.user.sexe_athlete,
+						nationalite_athlete: response.data.user.nationalite_athlete
+					})
+				} else {
+					console.log("Something went wrong.");
+				}
+			})
+			.catch(error => {
+				console.log(error)
+				if (error.response && error.response.status && error.response.status == 403) {
+					console.log("This e-mail/password combination is incorrect.")
+				} else {
+					console.log("Something went wrong.");
+				}
+			});
 	};
 
 	componentDidUpdate() {
 		const { user } = this.props;
-
-		// && user.token
-		if (user) {
+		if (user && user.token) {
 			this.props.navigation.navigate('Athletics')
 		}
 	}
@@ -118,7 +149,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
 	return {
-		login: (email, password) => dispatch(login(email, password)),
+		loginSuccess: (data) => dispatch(loginSuccess(data)),
 	};
 };
 

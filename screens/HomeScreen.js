@@ -21,15 +21,22 @@ class HomeScreen extends Component {
 
     render() {
     return (
-        <Drawer.Navigator initialRouteName="Profile">
-          <Drawer.Screen name="Profile" component={ProfileScreen} />
-          <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
-          <Drawer.Screen name="Events" component={EventScreen} />
-          <Drawer.Screen name="EditEvent" component={EditEventScreen} />
-          <Drawer.Screen name="CreateEvent" component={CreateEventScreen} />
-          <Drawer.Screen name="Participations" component={ParticipationScreen} />
-          <Drawer.Screen name="Users" component={UserScreen} />
-        </Drawer.Navigator>
+        this.props.user.role.role == 'ADMIN' ?
+            <Drawer.Navigator initialRouteName="Profile">
+                <Drawer.Screen name="Profile" component={ProfileScreen} />
+                <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
+                <Drawer.Screen name="Events" component={EventScreen} />
+                <Drawer.Screen name="Participations" component={ParticipationScreen} />
+                <Drawer.Screen name="EditEvent" component={EditEventScreen} />
+                <Drawer.Screen name="CreateEvent" component={CreateEventScreen} />
+                <Drawer.Screen name="Users" component={UserScreen} />
+            </Drawer.Navigator>:
+            <Drawer.Navigator initialRouteName="Profile">
+                <Drawer.Screen name="Profile" component={ProfileScreen} />
+                <Drawer.Screen name="EditProfile" component={EditProfileScreen} />
+                <Drawer.Screen name="Events" component={EventScreen} />
+                <Drawer.Screen name="Participations" component={ParticipationScreen} />
+            </Drawer.Navigator>
     );
   }
 }

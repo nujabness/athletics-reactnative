@@ -3,12 +3,29 @@ import { StyleSheet, Text, View, Button} from 'react-native';
 import FadeSlide from "../../animations/FadeSlide/FadeSlide";
 import COLORS from "../../utils/colors";
 import EditEventForm from "../../components/Form/EditEventForm";
+import DataService from "../../services/http.service";
+import {connect} from "react-redux";
 
 console.disableYellowBox = true;
 
-export default class  CreateEventScreen extends Component {
+class  CreateEventScreen extends Component {
     handleEditFormSubmit = values => {
-        console.log(values)
+        let headers = {
+            headers: {
+                Authorization: 'Bearer ' + this.props.user.token
+            }
+        }
+        let body = {
+            nom_epreuve: values.nom_epreuve,
+            type_epreuve: values.type_epreuve,
+            phase_epreuve: values.phase_epreuve,
+            date_epreuve: values.date_epreuve
+        }
+        DataService.createEvents(body, headers).then(response => {
+            this.props.navigation.navigate('Events')
+        }).catch(e => {
+            console.log(e);
+        });
     };
 
     render(){
@@ -87,3 +104,11 @@ const styles = StyleSheet.create({
         color: COLORS.red,
     },
 });
+
+const mapStateToProps = state => ({
+    user: state.app.user,
+});
+
+export default connect(
+    mapStateToProps
+)(CreateEventScreen);
